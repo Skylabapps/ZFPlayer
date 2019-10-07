@@ -894,18 +894,24 @@ typedef NS_ENUM(NSInteger, PanDirection){
 }
 
 - (void)changeStatusBackgroundColor:(UIColor *)color {
-    UIView *statusBar = [[[UIApplication sharedApplication] valueForKey:@"statusBarWindow"] valueForKey:@"statusBar"];
-    if ([statusBar respondsToSelector:@selector(setBackgroundColor:)]) {
-        statusBar.backgroundColor = color;
+    if (@available(iOS 13.0, *)) {} else {
+        UIView *statusBar = [[[UIApplication sharedApplication] valueForKey:@"statusBarWindow"] valueForKey:@"statusBar"];
+        if ([statusBar respondsToSelector:@selector(setBackgroundColor:)]) {
+            statusBar.backgroundColor = color;
+        }
     }
 }
 
 - (UIColor *)getOriginStatusBackgroundColor {
-    UIView *statusBar = [[[UIApplication sharedApplication] valueForKey:@"statusBarWindow"] valueForKey:@"statusBar"];
-    if ([statusBar respondsToSelector:@selector(backgroundColor)]) {
-        return statusBar.backgroundColor;
+    if (@available(iOS 13.0, *)) {
+        return self.backgroundColor;
+    } else {
+        UIView *statusBar = [[[UIApplication sharedApplication] valueForKey:@"statusBarWindow"] valueForKey:@"statusBar"];
+        if ([statusBar respondsToSelector:@selector(backgroundColor)]) {
+            return statusBar.backgroundColor;
+        }
+        return self.backgroundColor;
     }
-    return self.backgroundColor;
 }
 
 #pragma mark - 缓冲较差时候
